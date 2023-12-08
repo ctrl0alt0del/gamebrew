@@ -1,5 +1,4 @@
 node_modules/
-.expo/
 dist/
 npm-debug.*
 *.jks
@@ -16,6 +15,3 @@ yarn-error.log
 android/
 ios/
 .vscode/
-.maestro/
-.husky/
-assets/
