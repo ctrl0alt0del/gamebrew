@@ -31,8 +31,8 @@ require('dotenv').config({
  * for example: if the APP_ENV is staging, the bundle id will be com.gamebrew.staging
  */
 
-const BUNDLE_ID = 'com.gamebrew'; // ios bundle id
-const PACKAGE = 'com.gamebrew'; // android package name
+const BUNDLE_ID = 'com.venoshth.gamebrew'; // ios bundle id
+const PACKAGE = 'com.venoshth.gamebrew'; // android package name
 const NAME = 'gamebrew'; // app name
 const EXPO_ACCOUNT_OWNER = 'expo-owner'; // expo account owner
 const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044'; // eas project id
@@ -90,8 +90,8 @@ const buildTime = z.object({
 const _clientEnv = {
   APP_ENV,
   NAME: NAME,
-  BUNDLE_ID: withEnvSuffix(BUNDLE_ID),
-  PACKAGE: withEnvSuffix(PACKAGE),
+  BUNDLE_ID: BUNDLE_ID,
+  PACKAGE: PACKAGE,
   VERSION: packageJSON.version,
 
   // ADD YOUR ENV VARS HERE TOO
