@@ -1,3 +1,4 @@
+import { createSelectors } from '@/core';
 import { IUIElement } from '@/types/ui-types';
 import { create } from 'zustand';
 
@@ -8,9 +9,9 @@ export interface IUIState {
 const uiStore = create<IUIState>((set, get) => ({
   root: {
     _tag: 'root',
-    attributes: {},
+    props: {},
     children: [],
   },
 }));
 
-const useUIStore = createSe;
+export const useUIStore = createSelectors(uiStore);

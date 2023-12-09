@@ -34,5 +34,7 @@ export const loadSelectedTheme = () => {
   if (theme !== undefined) {
     console.log('theme', theme);
     NativeWindStyleSheet.setColorScheme(theme as ColorSchemeType);
+  } else {
+    NativeWindStyleSheet.setColorScheme('light');
   }
 };
