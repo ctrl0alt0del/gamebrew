@@ -1,32 +1,29 @@
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
+import { NativeWindStyleSheet } from 'nativewind';
 import React, { useEffect } from 'react';
 
-import { loadSelectedTheme } from '@/core';
+import {
+  factoryUIElementRenderer,
+  RenderIrisPressable,
+  RenderIrisText,
+  UIStateRenderer,
+} from '@/ui/system';
 
-import { SafeAreaView, Text } from './ui';
-import { IrisPressable } from './ui/system/ui-composer/renderer-lib/ui-pressable';
-import { IrisText } from './ui/system/ui-composer/renderer-lib/ui-text';
-import { factoryUIElementRenderer } from './ui/system/ui-composer/ui-element-renderer';
-
-loadSelectedTheme();
+NativeWindStyleSheet.setColorScheme('light');
 SplashScreen.preventAutoHideAsync();
 
 const Renderer = factoryUIElementRenderer({
-  text: IrisText,
-  pressable: IrisPressable,
+  text: RenderIrisText,
+  pressable: RenderIrisPressable,
 });
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
-  return (
-    <SafeAreaView className="h-screen bg-white">
-      <Text>Hello World</Text>
-    </SafeAreaView>
-  );
+  return <UIStateRenderer Renderer={Renderer} />;
 };
 
 export default App;

@@ -4,6 +4,7 @@ export interface IUIElement<
   Props = any
 > {
   readonly _tag: _Tag;
+  key: string;
   props: Props;
   children?: (IUIElement | string)[];
 }
@@ -23,6 +24,7 @@ type PropsOfUIElementStandard<
   : never;
 
 type IrisPropsSet = {
+  root: {};
   text: {
     text: string;
   };
@@ -34,8 +36,10 @@ export type IrisElementTags = keyof IrisPropsSet;
 export type IrisElement = UIElementStandard<IrisPropsSet>;
 export type IrisElementInstance<Tag extends IrisElementTags> = IUIElement<
   Tag,
-  PropsOfUIElementStandard<IrisElement, Tag>
+  IrisElementProps<Tag>
 >;
+export type IrisElementProps<Tag extends IrisElementTags> =
+  PropsOfUIElementStandard<IrisElement, Tag>;
 
 export const isIrisElement = (
   element: string | IUIElement
@@ -45,3 +49,5 @@ export const isIrisElement = (
     (element._tag === 'text' || element._tag === 'pressable')
   );
 };
+
+export type RootElement = IUIElement<'root', {}>;

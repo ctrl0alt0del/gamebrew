@@ -1,9 +1,9 @@
-type Lens<S, A> = {
+export type Lens<S, A> = {
   get: (s: S) => A;
   set: (a: A) => (s: S) => S;
 };
 
-export default {
+export const LensUtils = {
   create: <S, A>(get: (s: S) => A, set: (a: A) => (s: S) => S): Lens<S, A> => ({
     get,
     set,
@@ -24,4 +24,20 @@ export default {
       return copy as S;
     },
   }),
+  itemByProp: <S extends Array<any>, A>(
+    prop: keyof A,
+    value: A[keyof A]
+  ): Lens<S, A> => ({
+    get: (s: S) => s.find((item) => item[prop] === value) as A,
+    set: (a: A) => (s: S) => {
+      const copy = [...s];
+      const index = copy.findIndex((item) => item[prop] === value);
+      copy[index] = a;
+      return copy as S;
+    },
+  }),
+  nil: {
+    get: () => void 0,
+    set: () => () => void 0,
+  } as Lens<void, void>,
 };

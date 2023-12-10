@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import type { IrisElementInstance, IrisElementTags } from '@/types/ui-types';
 import { isIrisElement } from '@/types/ui-types';
@@ -11,26 +11,35 @@ export type IrisElementHandler<Tag extends IrisElementTags> = React.FC<
   IrisElementInstance<Tag>['props']
 >;
 
+export type UIElementRenderer = React.FC<
+  UIElementRendererProps<IrisElementTags>
+>;
+
 export const factoryUIElementRenderer = (map: {
-  [K in IrisElementTags]: IrisElementHandler<Extract<IrisElementTags, K>>;
+  [K in Exclude<IrisElementTags, 'root'>]: IrisElementHandler<
+    Extract<IrisElementTags, K>
+  >;
 }) => {
-  const UIElementRenderer = <Tag extends IrisElementTags>({
-    element,
-  }: UIElementRendererProps<Tag>) => {
-    const { _tag, props, children } = element;
-    const Component = map[_tag];
-    if (!Component) {
-      throw new Error(`No component found for tag ${_tag}`);
-    }
-    const childrenArray = children?.map((child) => {
-      if (isIrisElement(child)) {
-        return <UIElementRenderer element={child} />;
-      } else {
-        return child;
+  const UIElementRenderer = memo<UIElementRendererProps<IrisElementTags>>(
+    <Tag extends IrisElementTags>({ element }: UIElementRendererProps<Tag>) => {
+      const { _tag, props, children, key } = element;
+      const childrenArray = children?.map((child) => {
+        if (isIrisElement(child)) {
+          return <UIElementRenderer element={child} key={key} />;
+        } else {
+          return child;
+        }
+      }) as React.ReactNode[];
+      if (_tag === 'root') {
+        return <>{childrenArray}</>;
       }
-    }) as React.ReactNode[];
-    return <Component {...{ ...props, children: childrenArray }} />;
-  };
+      const Component = map[_tag as Exclude<IrisElementTags, 'root'>];
+      if (!Component) {
+        throw new Error(`No component found for tag ${_tag}`);
+      }
+      return <Component {...props}>{childrenArray}</Component>;
+    }
+  );
 
   return UIElementRenderer;
 };

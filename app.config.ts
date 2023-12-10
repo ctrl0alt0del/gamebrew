@@ -76,4 +76,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: Env.EAS_PROJECT_ID,
     },
   },
+  expo: {
+    userInterfaceStyle: 'light',
+    ios: {
+      userInterfaceStyle: 'light',
+    },
+    android: {
+      userInterfaceStyle: 'light',
+    },
+  },
 });

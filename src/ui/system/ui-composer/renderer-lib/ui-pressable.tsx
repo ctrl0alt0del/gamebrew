@@ -4,7 +4,7 @@ import { Pressable } from '@/ui/core';
 
 import type { IrisElementHandler } from '../ui-element-renderer';
 
-export const IrisPressable: IrisElementHandler<'pressable'> = ({
+export const RenderIrisPressable: IrisElementHandler<'pressable'> = ({
   onPress,
   ...props
 }) => {
