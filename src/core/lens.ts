@@ -36,6 +36,11 @@ export const LensUtils = {
       return copy as S;
     },
   }),
+  //identity lens for compose function
+  identity: <S>(): Lens<S, S> => ({
+    get: (s: S) => s,
+    set: () => (s: S) => s,
+  }),
   nil: {
     get: () => void 0,
     set: () => () => void 0,

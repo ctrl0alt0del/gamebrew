@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react';
-import { v4 } from 'uuid';
+import React from 'react';
 
 import { type Lens, LensUtils } from '@/core/lens';
-import { useUILens } from '@/state/ui-state';
+import { irisRenderIrisElementOp } from '@/types/general';
 import type {
   IrisElement,
   IrisElementProps,
@@ -10,6 +9,8 @@ import type {
   IUIElement,
   RootElement,
 } from '@/types/ui-types';
+
+import { useIrisCompile } from './deafult-compiler';
 
 const ParentUIStateLens = React.createContext<Lens<
   RootElement,
@@ -28,33 +29,8 @@ const childItemLens = function <
 };
 
 export const factoryRemoteRenderable = <T extends IrisElementTags>(_tag: T) => {
-  const RemoteRenderable = (props: any) => {
-    const parentLens = useContext(ParentUIStateLens);
-    if (!parentLens) {
-      throw new Error('ParentUIStateLens is not provided');
-    }
-    const { children, ...rest } = props;
-    const key = v4();
-    const selfLens = LensUtils.compose(
-      parentLens,
-      childItemLens<T, IrisElementProps<T>>(key)
-    );
-    const stateLens = useUILens<IUIElement<T, IrisElementProps<T>>>(selfLens);
-    const uiElement: IUIElement<T> = {
-      _tag,
-      key,
-      props: rest,
-      children: [],
-    };
-    useEffect(() => {
-      stateLens.set(uiElement);
-      return () => {};
-    }, []);
-    return (
-      <ParentUIStateLens.Provider value={null}>
-        {children}
-      </ParentUIStateLens.Provider>
-    );
+  const RemoteRenderable = () => {
+    return useIrisCompile((el) => [irisRenderIrisElementOp(el)]);
   };
   return RemoteRenderable;
 };
