@@ -31,6 +31,7 @@ type IrisPropsSet = {
   pressable: {
     onPress: () => void;
   };
+  view: {};
 };
 export type IrisElementTags = keyof IrisPropsSet;
 export type IrisElement = UIElementStandard<IrisPropsSet>;
@@ -41,13 +42,12 @@ export type IrisElementInstance<Tag extends IrisElementTags> = IUIElement<
 export type IrisElementProps<Tag extends IrisElementTags> =
   PropsOfUIElementStandard<IrisElement, Tag>;
 
-export const isIrisElement = (
-  element: string | IUIElement
-): element is IrisElement => {
-  return (
-    typeof element !== 'string' &&
-    (element._tag === 'text' || element._tag === 'pressable')
-  );
-};
-
 export type RootElement = IUIElement<'root', {}>;
+
+const availableIrisTags = ['text', 'pressable', 'root'] as const;
+
+export const isIrisElementTag = (tag: KeyMetaType): tag is IrisElementTags =>
+  availableIrisTags.includes(tag as any);
+
+export const isIrisElement = (element: IUIElement): element is IrisElement =>
+  isIrisElementTag(element._tag);

@@ -1,32 +1,44 @@
 import type React from 'react';
-import { v4 } from 'uuid';
 
 import type { BaseIrisOp } from '@/types/general';
-import type { IUIElement } from '@/types/ui-types';
+
+import type { IrisRemoteElement } from './iris-remote-tree';
 const isJSXElementConstructor = (element: any): element is React.FC<any> => {
   return typeof element === 'function';
 };
 
-export const factoryIrisCompiler = () => {
+export type IrisTreeBuilderFactory<T> = (
+  parent?: IrisRemoteElement<T> | null
+) => (element: T) => IrisRemoteElement<T>;
+
+type CompilerFactoryOptions<T> = {
+  toIrisTree: IrisTreeBuilderFactory<T>;
+};
+
+export const factoryIrisCompiler = <T>({
+  toIrisTree,
+}: CompilerFactoryOptions<T>) => {
   const opQueue: BaseIrisOp[] = [];
-  const currentElementRef: {
-    current: IUIElement | null;
-  } = { current: null };
-  const compile = (element: React.ReactElement) => {
-    if (!isJSXElementConstructor(element.type)) {
-      throw new Error('Element type is not a function');
+  //ref is stack of IrisRemoteElement
+  const elementsStackRef: {
+    current: IrisRemoteElement[];
+  } = { current: [] };
+  //TODO: where is children processing ??
+  const compile = (element: T) => {
+    const treeBuilder = toIrisTree(elementsStackRef.current[0]);
+    const node = treeBuilder(element);
+    elementsStackRef.current.push(node);
+    const result = node.fc(node.element.props);
+    for (const item of result) {
+      compile(item);
     }
-    const { children, ...props } = element.props;
-    currentElementRef.current = {
-      _tag: element.type.displayName || element.type.name,
-      props: { ...props, key: element.key },
-      children: children.map(compile),
-      key: v4(),
-    };
-    currentElementRef.current.children = ;
+    elementsStackRef.current.pop();
+    return opQueue;
   };
-  const useIrisCompile = (opFactory: (el: IUIElement) => BaseIrisOp[]) => {
-    opQueue.push(...opFactory(currentElementRef.current!));
+  const useIrisCompile = (
+    opFactory: (el: IrisRemoteElement) => BaseIrisOp[]
+  ) => {
+    opQueue.push(...opFactory(elementsStackRef.current[0]!));
   };
   return {
     compile,

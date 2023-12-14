@@ -31,6 +31,7 @@ export interface IrisIndexLensOp<A extends Array<B>, B>
 export interface IrisItemByPropLensOp<A extends Array<B>, B>
   extends BaseIrisLensOp<IrisLensKind.ItemByProp, A, B> {
   prop: keyof B;
+  value: B[keyof B];
 }
 
 export interface IrisIdentityLensOp<A>
@@ -56,11 +57,13 @@ export const IrisLens = {
     index,
   }),
   itemByProp: <A extends Array<B>, B>(
-    prop: keyof B
+    prop: keyof B,
+    value: B[keyof B]
   ): IrisItemByPropLensOp<A, B> => ({
     kind: IrisKind.Lens,
     lensKind: IrisLensKind.ItemByProp,
-    prop: prop as any,
+    prop,
+    value,
   }),
   identity: <A>(): IrisIdentityLensOp<A> => ({
     kind: IrisKind.Lens,

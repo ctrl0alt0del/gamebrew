@@ -38,6 +38,7 @@ module.exports = {
   ],
   coverageDirectory: '<rootDir>/coverage/',
   moduleNameMapper: {
+    '^uuid$': 'uuid',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
 };
