@@ -9,9 +9,9 @@ export type IrisRemoteElement<
   Element extends IUIElement = IUIElement
 > = {
   element: Element;
-  parent?: IrisRemoteElement<T, Element> | null;
+  parent: IrisRemoteElement<T, Element> | null;
   key: string;
-  lens?: IrisLensOp<IrisElementInstance<'root'>, Element>;
+  lens: IrisLensOp<IrisElementInstance<'root'>, Element>;
   fc: <P>(props: P & React.PropsWithChildren<P>) => Iterable<T>;
 };
 export const reactToIrisTree =
@@ -36,7 +36,7 @@ export const reactToIrisTree =
             IrisLens.itemByProp('key', key)
           )
         )
-      : undefined;
+      : IrisLens.identity();
 
     return {
       element: {

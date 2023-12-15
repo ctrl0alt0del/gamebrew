@@ -25,7 +25,10 @@ export const factoryIrisCompiler = <T>({
   } = { current: [] };
   //TODO: where is children processing ??
   const compile = (element: T) => {
-    const treeBuilder = toIrisTree(elementsStackRef.current[0]);
+    const initialIndex = opQueue.length;
+    const treeBuilder = toIrisTree(
+      elementsStackRef.current[elementsStackRef.current.length - 1]
+    );
     const node = treeBuilder(element);
     elementsStackRef.current.push(node);
     const result = node.fc(node.element.props);
@@ -33,12 +36,17 @@ export const factoryIrisCompiler = <T>({
       compile(item);
     }
     elementsStackRef.current.pop();
-    return opQueue;
+    const ops = opQueue.slice(initialIndex);
+    return ops;
   };
   const useIrisCompile = (
     opFactory: (el: IrisRemoteElement) => BaseIrisOp[]
   ) => {
-    opQueue.push(...opFactory(elementsStackRef.current[0]!));
+    opQueue.push(
+      ...opFactory(
+        elementsStackRef.current[elementsStackRef.current.length - 1]!
+      )
+    );
   };
   return {
     compile,
