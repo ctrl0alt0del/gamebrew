@@ -4,12 +4,13 @@ import { createSelectors } from '@/core';
 import { Func } from '@/core/func';
 import type { Lens } from '@/core/lens';
 import { LensUtils } from '@/core/lens';
-import type { IrisActionOp } from '@/types/iris-action';
 import type { RootElement } from '@/types/ui-types';
+
+import type { GameAction } from './game-action';
 
 export interface IGameState {
   root: RootElement;
-  actionsQueue: IrisActionOp[];
+  actionsQueue: GameAction[];
   setUITree: (tree: RootElement) => void;
 }
 
@@ -20,6 +21,7 @@ export const gameStore = create<IGameState>((set) => ({
     children: [],
     key: 'root',
   },
+  actionsQueue: [],
   setUITree: (tree) => {
     set({ root: tree });
   },
