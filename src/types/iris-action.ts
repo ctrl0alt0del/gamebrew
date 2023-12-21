@@ -1,4 +1,4 @@
-import type { IrisActionsKind } from '@/core/iris-actions-lib';
+import type { IrisActionsKind } from '@/core/iris-actions-lib/iris-action-def';
 
 import type { BaseIrisOp } from './iris-op-types';
 import { IrisKind } from './iris-op-types';
@@ -29,4 +29,5 @@ export const IrisDispatch = {
     kind: IrisKind.Dispatch,
     actions,
   }),
+  is: (op: any): op is IrisDispatchOp => op.kind === IrisKind.Dispatch,
 };

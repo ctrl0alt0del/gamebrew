@@ -20,7 +20,7 @@ export type Stream<T> = {
   value: IrisValue<T>;
 };
 
-export interface BaseIrisOp<OpType extends IrisKind = any> {
+export interface BaseIrisOp<OpType extends IrisKind = IrisKind> {
   kind: OpType;
 }
 

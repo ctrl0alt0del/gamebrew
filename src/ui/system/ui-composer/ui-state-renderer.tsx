@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useUIStore } from '@/state/ui-state';
+import { useGameStore } from '@/state/ui-state';
 import { SafeAreaView } from '@/ui/core';
 
 import type { UIElementRenderer } from './ui-element-renderer';
@@ -10,7 +10,7 @@ type UIElementRendProps = {
 };
 
 export const UIStateRenderer = ({ Renderer }: UIElementRendProps) => {
-  const { root } = useUIStore();
+  const { root } = useGameStore();
   return (
     <SafeAreaView className="h-screen bg-white">
       <Renderer element={root} />
